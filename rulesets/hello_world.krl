@@ -6,13 +6,23 @@ ruleset hello_world {
     >>
     author "Kyle Hoover"
     logging on
-    shares hello
+    shares hello, __testing
   }
 
   global {
     hello = function (obj) {
       msg = "Hello" + obj;
       msg
+    }
+
+    __testing = {
+      "queries": [
+        {"name": "hello", "args": ["obj"]},
+        {"name": "__testing"}
+      ],
+      "events": [
+        {"domain": "echo", "type": "hello"}
+      ]
     }
   }
 
