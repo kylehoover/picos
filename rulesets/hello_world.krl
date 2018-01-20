@@ -46,7 +46,7 @@ ruleset hello_world {
   rule echo_monkey_ternary {
     select when echo monkey
     pre {
-      name = event:attr("name") => event:attr("name") | "Monkey"
+      name = (event:attr("name") => event:attr("name") | "Monkey").klog("value used for name (ternary): ")
     }
     send_directive("Hello " + name)
   }
