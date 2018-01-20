@@ -21,13 +21,16 @@ ruleset hello_world {
         {"name": "__testing"}
       ],
       "events": [
-        {"domain": "echo", "type": "hello"}
+        {"domain": "echo", "type": "hello", "attrs": ["name"]}
       ]
     }
   }
 
   rule hello_world {
     select when echo hello
-    send_directive("say", {"something": "Hello World"})
+    pre {
+      name = event:attr("name").klog("the passed in name: ")
+    }
+    send_directive("say", {"something": "Hello " + name})
   }
 }
