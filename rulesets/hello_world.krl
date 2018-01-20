@@ -21,7 +21,8 @@ ruleset hello_world {
         {"name": "__testing"}
       ],
       "events": [
-        {"domain": "echo", "type": "hello", "attrs": ["name"]}
+        {"domain": "echo", "type": "hello", "attrs": ["name"]},
+        {"domain": "echo", "type": "monkey", "attrs": ["name"]}
       ]
     }
   }
@@ -32,5 +33,13 @@ ruleset hello_world {
       name = event:attr("name").klog("the passed in name: ")
     }
     send_directive("say", {"something": "Hello " + name})
+  }
+
+  rule echo_monkey {
+    select when echo monkey
+    pre {
+      name = event:attr("name").defaultsTo("Monkey").klog("value used for name: ")
+    }
+    send_directive("Hello " + name)
   }
 }
