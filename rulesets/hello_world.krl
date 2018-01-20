@@ -42,4 +42,12 @@ ruleset hello_world {
     }
     send_directive("Hello " + name)
   }
+
+  rule echo_monkey_ternary {
+    select when echo monkey
+    pre {
+      name = event:attr("name") => event:attr("name") | "Monkey"
+    }
+    send_directive("Hello " + name)
+  }
 }
