@@ -12,12 +12,12 @@ ruleset cs_465.twilio {
     }
 
     messages = function(to, from, page_size) {
-      qp = "?" +
-           (to => <<To=#{to}&>> | "") +
-           (from => <<From=#{from}&>> | "") +
-           (page_size => <<PageSize=#{page_size}>> | "");
-      url = get_base_url() + "Messages.json" + qp;
-      resp = http:get(url){"content"}.decode(){"messages"};
+      url = get_base_url() + "Messages.json";
+      resp = http:get(url, qs = {
+        "To": to,
+        "From": from,
+        "PageSize": page_size
+      }){"content"}.decode(){"messages"};
       resp
     }
 
