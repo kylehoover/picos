@@ -21,10 +21,10 @@ ruleset cs_465.twilio {
       resp
     }
 
-    send_sms = defaction(to, from, message) {
+    send_sms = defaction(to, message) {
       url = get_base_url() + "Messages.json"
       http:post(url, form = {
-        "From": from,
+        "From": "+13854550013",
         "To": to,
         "Body": message
       }) setting(resp)

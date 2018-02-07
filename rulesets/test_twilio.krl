@@ -7,7 +7,7 @@ ruleset cs_465.test_twilio {
   global {
     __testing = {
       "events": [
-        {"domain": "sms", "type": "send", "attrs": ["to", "from", "message"]}
+        {"domain": "sms", "type": "send", "attrs": ["to", "message"]}
       ],
       "queries": [
         {"name": "test_messages", "args": ["to", "from", "page_size"]}
@@ -23,7 +23,6 @@ ruleset cs_465.test_twilio {
     select when sms send
     twilio:send_sms(
       event:attr("to"),
-      event:attr("from"),
       event:attr("message")
     ) setting(resp)
     always {
