@@ -1,6 +1,6 @@
-ruleset cs_465.test_twilio {
+ruleset test_twilio {
   meta {
-    use module cs_465.twilio alias twilio
+    use module twilio
     share __testing, test_messages
   }
 

@@ -1,6 +1,6 @@
-ruleset cs_465.twilio {
+ruleset twilio {
   meta {
-    use module cs_465.twilio_keys
+    use module twilio_keys
     provides messages, send_sms
   }
 
