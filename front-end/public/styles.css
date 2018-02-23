@@ -1,0 +1,36 @@
+main {
+  margin: 50px auto;
+  width: 900px;
+}
+
+main header {
+  font-size: 40px;
+}
+
+#current-temp .temp {
+  font-size: 72px;
+}
+
+#current-temp .temp-text {
+  font-size: 40px;
+  margin-right: 32px;
+}
+
+#temp-list-item .temp {
+  font-size: 32px;
+  margin-right: 32px;
+}
+
+#sens-prof-btn, #back-btn {
+  margin: 32px 0;
+}
+
+#profile form {
+  margin: 32px 0;
+}
+
+#spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
