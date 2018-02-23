@@ -45,7 +45,6 @@ ruleset sensor_profile {
       threshold = event:attr("threshold").defaultsTo(ent:threshold)
       not_num = event:attr("notification_number").defaultsTo(ent:notification_number)
     }
-    // send_directive("here")
     fired {
       ent:name := name;
       ent:location := location;
