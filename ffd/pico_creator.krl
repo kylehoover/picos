@@ -1,16 +1,15 @@
 ruleset pico_creator {
   meta {
     use module io.picolabs.wrangler alias wrangler
-    shares __testing, get_registry_eci, p
+    shares __testing, get_registry_eci
   }
 
   global {
-    mutual_rids = ["auto_subscribe", "registration", "io.picolabs.subscription"]
+    mutual_rids = ["auto_subscribe", "location", "registration", "io.picolabs.subscription"]
 
     __testing = {
       "queries": [
-        {"name": "get_registry_eci"},
-        {"name": "p"}
+        {"name": "get_registry_eci"}
       ],
       "events": [
         {"domain": "ffd", "type": "new_driver"},
@@ -18,10 +17,6 @@ ruleset pico_creator {
         {"domain": "ffd", "type": "new_registry"},
         {"domain": "explicit", "type": "reset"}
       ]
-    }
-
-    p = function () {
-      engine:listChildren()
     }
 
     get_registry_eci = function () {
@@ -59,7 +54,7 @@ ruleset pico_creator {
         }
     }
   }
-
+  
   rule create_registry {
     select when ffd new_registry
     pre {
@@ -125,7 +120,7 @@ ruleset pico_creator {
         send_directive(<<Removed #{id}>>)
       }
   }
-
+  
   rule reset_entities {
     select when explicit reset
     send_directive("Reset entities")

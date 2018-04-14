@@ -2,11 +2,11 @@ ruleset auto_subscribe {
   meta {
     shares __testing
   }
-
+  
   global {
     __testing = {}
   }
-
+  
   rule auto_accept_ffd_subscriptions {
     select when wrangler inbound_pending_subscription_added
     pre {

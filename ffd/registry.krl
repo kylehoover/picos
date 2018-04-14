@@ -2,31 +2,31 @@ ruleset registry {
   meta {
     shares __testing, drivers
   }
-
+  
   global {
     __testing = {
       "queries": [
         {"name": "drivers"}
       ]
     }
-
+    
     drivers = function () {
       ent:drivers
     }
-
+    
     get_random_driver = function (ignore) {
       driver = ent:drivers[random:integer(ent:drivers.length() - 1)];
       driver == ignore => get_random_driver(ignore) | driver
     }
   }
-
+  
   rule init {
     select when wrangler ruleset_added where rids >< meta:rid
     fired {
       ent:drivers := []
     }
   }
-
+  
   rule register {
     select when ffd new_registration
     pre {
@@ -45,7 +45,7 @@ ruleset registry {
       ent:drivers := ent:drivers.append(wellKnown_Rx) if is_driver
     }
   }
-
+  
   rule make_connections {
     select when explicit connections_requested
     pre {

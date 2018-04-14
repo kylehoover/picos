@@ -8,7 +8,7 @@ ruleset registration {
       "queries": [
       ]
     }
-
+    
     get_Rx = function () {
       engine:listChannels()
         .filter(function (channel) {
