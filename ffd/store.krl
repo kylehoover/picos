@@ -49,13 +49,14 @@ ruleset store {
     foreach drivers() setting(driver)
       pre {
         order_id = event:attr("order_id")
+        // message: store_id, order_id, eci
       }
   }
   
   rule process_bid {
     select when ffd place_bid
     pre {
-      
+      // calc distance, possible replace current highest bidder
     }
   }
 }
