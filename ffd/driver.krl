@@ -34,11 +34,7 @@ ruleset driver {
   
   // after registering, get caught up on missing delivery requests
   rule catch_up {
-    select when wrangler subscription_added
-    pre {
-      is_new_driver = event:attr("status") == "outbound"
-    }
-    if is_new_driver then noop()
+    select when wrangler subscription_added status re#outbound#
     fired {
       raise gossip event "seen_all_needed"
     }
@@ -79,6 +75,40 @@ ruleset driver {
         "delivery_location": event:attr("delivery_location"),
         "status": event:attr("status")
       }
+    }
+  }
+  
+  rule schedule_delivery_timeout {
+    select when ffd bid_accepted
+    pre {
+      timeout = random:integer(30, 10)
+    }
+    fired {
+      schedule ffd event "delivered" at time:add(time:now(), {"seconds": timeout})
+        attributes {
+          "order_id": event:attr("order_id"),
+          "store_id": event:attr("store_id")
+        }
+    }
+  }
+  
+  rule notify_store {
+    select when ffd delivered
+    pre {
+      order_id = event:attr("order_id")
+      store_id = event:attr("store_id")
+      eci = ent:deliveries{[store_id, order_id, "eci"]}
+    }
+    event:send({
+      "eci": eci,
+      "domain": "ffd",
+      "type": "order_delivered",
+      "attrs": {
+        "order_id": order_id
+      }
+    })
+    fired {
+      ent:deliveries{[store_id, order_id, "status"]} := "delivered"
     }
   }
   

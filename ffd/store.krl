@@ -81,7 +81,7 @@ ruleset store {
       })
   }
   
-  rule set_collecting_bids_timeout {
+  rule schedule_collecting_bids_timeout {
     select when explicit delivery_needed
     fired {
       schedule explicit event "collecting_bids_timed_out"
@@ -157,6 +157,16 @@ ruleset store {
         "status": "out_for_delivery"
       }
     })
+  }
+  
+  rule update_order_status {
+    select when ffd order_delivered
+    pre {
+      order_id = event:attr("order_id")
+    }
+    fired {
+      ent:orders{[order_id, "status"]} := "delivered"
+    }
   }
   
   rule save_name {
