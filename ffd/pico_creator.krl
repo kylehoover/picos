@@ -5,7 +5,7 @@ ruleset pico_creator {
   }
 
   global {
-    mutual_rids = ["auto_subscribe", "location", "registration", "io.picolabs.subscription"]
+    mutual_rids = ["location", "shared", "io.picolabs.subscription"]
 
     __testing = {
       "queries": [
@@ -42,7 +42,7 @@ ruleset pico_creator {
       id = ent:driver_id
       name = <<Driver_#{id}>>
       color = "#A4EBC4"
-      rids = mutual_rids.append(["driver"])
+      rids = mutual_rids.append(["driver", "gossip"])
     }
     fired {
       ent:driver_id := id + 1;
@@ -94,8 +94,8 @@ ruleset pico_creator {
   rule send_registry_eci {
     select when wrangler child_initialized name re#Driver|Store#
     pre {
-      name = event:attr("name")
       eci = event:attr("eci")
+      name = event:attr("name")
       is_driver = name.match(re#Driver#)
     }
     event:send({
@@ -105,6 +105,22 @@ ruleset pico_creator {
       "attrs": {
         "registry_eci": get_registry_eci(),
         "is_driver": is_driver
+      }
+    })
+  }
+  
+  rule send_name {
+    select when wrangler child_initialized
+    pre {
+      eci = event:attr("eci")
+      name = event:attr("name")
+    }
+    event:send({
+      "eci": eci,
+      "domain": "ffd",
+      "type": "name_sent",
+      "attrs": {
+        "name": name
       }
     })
   }

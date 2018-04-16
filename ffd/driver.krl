@@ -12,6 +12,9 @@ ruleset driver {
     pre {
       // randomly choose to send bid or not
     }
+    fired {
+      log debug "<<< REQUEST RECEIVED >>>"
+    }
   }
   
   rule process_bid_accepted {
