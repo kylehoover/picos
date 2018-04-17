@@ -43,7 +43,7 @@ ruleset driver {
   rule process_delivery_request {
     select when ffd delivery_requested
     pre {
-      send_bid = random:integer(1)
+      send_bid = random:integer(1) == 1
     }
     if send_bid then
       event:send({

@@ -100,8 +100,7 @@ ruleset store {
       location = event:attr("location")
       order_id = event:attr("order_id")
       order = ent:orders{order_id}
-      distance = random:integer(20)
-      // distance = location:calc_distance(location, ent:location)
+      distance = location:calc_distance(location, ent:location)
       better_bid = order{"status"} == "accepting_bids" &&
                    (order{"driver_id"} == null || distance < order{"distance"})
     }
@@ -111,6 +110,7 @@ ruleset store {
         "driver_id": driver_id,
         "distance": distance,
         "eci": eci,
+        "location": order{"location"},
         "status": order{"status"}
       }
     }
