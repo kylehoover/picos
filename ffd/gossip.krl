@@ -56,8 +56,8 @@ ruleset gossip {
     select when wrangler ruleset_added where rids >< meta:rid
     fired {
       ent:interval := 10;
-      ent:stores := {}
-      // raise gossip event "schedule_heartbeat_requested"
+      ent:stores := {};
+      raise gossip event "schedule_heartbeat_requested"
     }
   }
   
