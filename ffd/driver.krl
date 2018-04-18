@@ -1,6 +1,7 @@
 ruleset driver {
   meta {
     use module location
+    use module twilio
     shares __testing, deliveries
   }
   
@@ -8,6 +9,9 @@ ruleset driver {
     __testing = {
       "queries": [
         {"name": "deliveries"}
+      ],
+      "events": [
+        {"domain": "driver", "type": "number_updated", "attrs": ["number"]}
       ]
     }
     
@@ -28,7 +32,8 @@ ruleset driver {
     select when wrangler ruleset_added where rids >< meta:rid
     fired {
       ent:deliveries := {};
-      ent:driver_id := null
+      ent:driver_id := null;
+      ent:notification_number := ""
     }
   }
   
@@ -66,7 +71,6 @@ ruleset driver {
       store_id = event:attr("store_id")
       add_store = ent:deliveries{store_id} == null
     }
-    // send twilio sms
     fired {
       ent:deliveries{store_id} := {} if add_store;
       ent:deliveries{[store_id, order_id]} := {
@@ -76,6 +80,17 @@ ruleset driver {
         "status": event:attr("status")
       }
     }
+  }
+  
+  rule notify_driver {
+    select when ffd bid_accepted
+    pre {
+      order_id = event:attr("order_id")
+      store_id = event:attr("store_id")
+      send_sms = ent:notification_number != ""
+    }
+    if send_sms then
+      twilio:send_sms(ent:notification_number, <<#{store_id} accepted your bid for order #{order_id}>>)
   }
   
   rule schedule_delivery_timeout {
@@ -116,6 +131,13 @@ ruleset driver {
     select when ffd name_sent
     fired {
       ent:driver_id := event:attr("name")
+    }
+  }
+  
+  rule update_notification_number {
+    select when driver number_updated
+    fired {
+      ent:notification_number := event:attr("number")
     }
   }
 }
